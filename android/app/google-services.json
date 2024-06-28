@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "446894985554",
+    "project_id": "ktalk-c64df",
+    "storage_bucket": "ktalk-c64df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446894985554:android:c4c6956bd3f2194c9c6a8b",
+        "android_client_info": {
+          "package_name": "com.example.ktalk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw5PYOQDJGOjdKJ0JnO6ezpQBvK4Awgd4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
