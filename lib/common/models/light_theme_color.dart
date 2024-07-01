@@ -7,7 +7,7 @@ class LightThemeColor extends ThemeColor {
     background1Color: const Color.fromRGBO(232,232,232, 1),
     background2Color: const Color.fromRGBO(232,232,232, 1),
     background3Color: const Color.fromRGBO(186,186,186, 1),
-    text1Color: const Color.fromARGB(18, 18, 18, 1),
-    text2Color: const Color.fromARGB(120, 120, 120, 1),
+    text1Color: const Color.fromRGBO(18, 18, 18, 1),
+    text2Color: const Color.fromRGBO(120, 120, 120, 1),
   );
 }

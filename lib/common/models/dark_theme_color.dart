@@ -7,7 +7,7 @@ class DarkThemeColor extends ThemeColor {
     background1Color: const Color.fromRGBO(18,18,18, 1),
     background2Color: const Color.fromRGBO(42,42,42, 1),
     background3Color: const Color.fromRGBO(18,18,18, 1),
-    text1Color: const Color.fromARGB(232, 232, 232, 1),
-    text2Color: const Color.fromARGB(146, 146, 146, 1),
+    text1Color: const Color.fromRGBO(232, 232, 232, 1),
+    text2Color: const Color.fromRGBO(146, 146, 146, 1),
   );
 }
