@@ -4,6 +4,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ktalk/auth/providers/auth_providers.dart';
 import 'package:ktalk/common/widgets/custom_buttom_widget.dart';
 
 import '../../common/utils/logger.dart';
@@ -37,6 +38,15 @@ class _PhoneNumberInputScreenState
     phoneCodeController.dispose();
     phoneNumberController.dispose();
     super.dispose();
+  }
+
+  Future<void> sendOTP() async {
+    final phoneCode = phoneCodeController.text;
+    final phoneNumber = phoneNumberController.text;
+
+    await ref.read(authProvider.notifier).sendOTP(
+      phoneNumber: '+$phoneCode$phoneNumber',
+    );
   }
 
   @override
@@ -137,7 +147,7 @@ class _PhoneNumberInputScreenState
                     if(form == null || !form.validate()){
                      return;
                     }
-
+                    sendOTP();
                   },
                   text: '다음',
                 ),
