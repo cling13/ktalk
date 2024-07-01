@@ -19,6 +19,7 @@ class _PhoneNumberInputScreenState
     extends ConsumerState<PhoneNumberInputScreen> {
   final countryController = TextEditingController();
   final phoneCodeController = TextEditingController();
+  final phoneNumberController = TextEditingController();
   final globalKey = GlobalKey<FormState>();
 
   @override
@@ -34,6 +35,7 @@ class _PhoneNumberInputScreenState
   void dispose() {
     countryController.dispose();
     phoneCodeController.dispose();
+    phoneNumberController.dispose();
     super.dispose();
   }
 
@@ -102,6 +104,7 @@ class _PhoneNumberInputScreenState
                       child: Form(
                         key: globalKey,
                         child: TextFormField(
+                          controller: phoneNumberController,
                           decoration: const InputDecoration(
                             isDense: true,
                           ),
