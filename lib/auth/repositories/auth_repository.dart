@@ -6,7 +6,7 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) => AuthRepository(
 
 class AuthRepository{
   final FirebaseAuth auth;
-  String? _verificationID;
+  String? _verificationId;
 
   AuthRepository({
     required this.auth,
@@ -19,7 +19,7 @@ class AuthRepository{
     await auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
         codeSent: (verificationId, _) {
-          _verificationID = verificationId;
+          _verificationId = verificationId;
     },
         verificationCompleted: (_){},
         verificationFailed: (error){
@@ -31,5 +31,15 @@ class AuthRepository{
     );
   }
 
+  Future<void> verifyOTP({
+    required String userOTP,
+})async {
+    final credential = PhoneAuthProvider.credential(
+        verificationId: _verificationId!,
+        smsCode: userOTP,
+    );
+
+    await auth.signInWithCredential(credential);
+  }
 
 }
