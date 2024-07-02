@@ -1,13 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ktalk/auth/providers/auth_providers.dart';
 import 'package:ktalk/auth/screens/opt_screen.dart';
 import 'package:ktalk/auth/screens/phone_number_input_screen.dart';
+import 'package:ktalk/auth/screens/user_information_screen.dart';
 import 'package:ktalk/common/enum/theme_mode_enum.dart';
 import 'package:ktalk/common/providers/custom_theme_provider.dart';
 import 'package:ktalk/firebase_options.dart';
 import 'package:ktalk/router.dart';
+
+import 'common/utils/logger.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,8 +69,36 @@ class MyApp extends ConsumerWidget {
           ),
         ),
         home: const Scaffold(
-          body: PhoneNumberInputScreen(),
+          body: Main(),
         ),
     );
+  }
+}
+
+class Main extends ConsumerWidget{
+  const Main({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final auth = ref. watch(authStateProvider);
+
+    return Scaffold(
+      body: auth.when(
+        data: (user){
+          if(user == null){
+            return const PhoneNumberInputScreen();
+          }
+          return const UserInformationScreen();
+        },
+        error: (error, stackTrace){
+          logger.d(error);
+          logger.d(stackTrace);
+          return null;
+        },
+        loading: () {
+          return const CircularProgressIndicator();
+        },
+      ),
+    );throw UnimplementedError();
   }
 }
