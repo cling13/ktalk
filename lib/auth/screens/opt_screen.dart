@@ -3,6 +3,9 @@ import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ktalk/auth/providers/auth_providers.dart';
 
+import '../../common/utils/global_navigator.dart';
+import '../../common/utils/logger.dart';
+
 class OTPScreen extends ConsumerWidget {
   static const String routeName = '/otp-screen';
 
@@ -39,10 +42,15 @@ class OTPScreen extends ConsumerWidget {
                   hintStyle: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 onSubmit: (value) async {
-                  await ref
-                      .read(authProvider.notifier)
-                      .verifyOTP(userOTP: value);
-                  Navigator.popUntil(context, (route) => route.isFirst);
+                  try {
+                    await ref
+                        .read(authProvider.notifier)
+                        .verifyOTP(userOTP: value);
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  }catch (e, stackTrace) {
+                    GlobalNavigator.showAlertDialog(text: e.toString());
+                    logger.d(stackTrace);
+                  }
                 },
               ),
             ),

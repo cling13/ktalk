@@ -1,8 +1,12 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ktalk/auth/providers/auth_providers.dart';
+import 'package:ktalk/common/widgets/custom_buttom_widget.dart';
+
+import '../../common/utils/global_navigator.dart';
+import '../../common/utils/logger.dart';
 
 class UserInformationScreen extends ConsumerStatefulWidget {
   const UserInformationScreen({super.key});
@@ -13,40 +17,49 @@ class UserInformationScreen extends ConsumerStatefulWidget {
 }
 
 class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
+  final globalKey = GlobalKey<FormState>();
+  final namecontroller = TextEditingController();
   File? image;
+
+  @override
+  void dispose() {
+    namecontroller.dispose();
+    super.dispose();
+  }
 
   Widget _profileWidget() {
     return image == null
         ? GestureDetector(
-            onTap: _selectedImage,
-            child: CircleAvatar(
-              backgroundColor: Colors.grey.withOpacity(0.7),
-              radius: 60,
-              child: const Icon(
-                Icons.add_a_photo,
-                color: Colors.black,
-                size: 30,
-              ),
-            ),
-          )
+      onTap: _selectedImage,
+      child: CircleAvatar(
+        backgroundColor: Colors.grey.withOpacity(0.7),
+        radius: 60,
+        child: const Icon(
+          Icons.add_a_photo,
+          color: Colors.black,
+          size: 30,
+        ),
+      ),
+    )
         : GestureDetector(
-            onTap: _selectedImage,
-            child: Stack(children: [
-              CircleAvatar(
-                backgroundImage: FileImage(image!),
-                radius: 60,
-              ),
-              Positioned(
-                top: -10,
-                right: -10,
-                child: IconButton(
-                    onPressed: () => setState(() {
-                          image = null;
-                        }),
-                    icon: const Icon(Icons.remove_circle)),
-              )
-            ]),
-          );
+      onTap: _selectedImage,
+      child: Stack(children: [
+        CircleAvatar(
+          backgroundImage: FileImage(image!),
+          radius: 60,
+        ),
+        Positioned(
+          top: -10,
+          right: -10,
+          child: IconButton(
+              onPressed: () =>
+                  setState(() {
+                    image = null;
+                  }),
+              icon: const Icon(Icons.remove_circle)),
+        )
+      ]),
+    );
   }
 
   _selectedImage() async {
@@ -63,6 +76,16 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
     }
   }
 
+  Future<void> _saveUserData() async {
+    final name = namecontroller.text.trim();
+    await ref.watch(authProvider.notifier).saveUserData(
+        name: name,
+        profileImage: image
+    );
+
+    ref.invalidate(authStateProvider);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,6 +98,55 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
           const Text('이름과 프로필 사진을 입력해 주세요'),
           const SizedBox(height: 30),
           _profileWidget(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                width: 300,
+                child: Form(
+                  key: globalKey,
+                  child: TextFormField(
+                    controller: namecontroller,
+                    decoration: const InputDecoration(
+                      hintText: '이름을 입력해주세요',
+                    ),
+                    validator: (value) {
+                      if (value == null || value
+                          .trim()
+                          .isEmpty) {
+                        return '이름을 입력해주세요';
+                      }
+                      return null;
+                    },
+                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: CustomButtonWidget(
+              text: '다음',
+              onPressed: () async {
+                FocusScope.of(context).unfocus();
+                final form = globalKey.currentState;
+
+                if (form == null || !form.validate()) {
+                  return;
+                }
+
+                try {
+                  await _saveUserData();
+                } catch (e, stackTrace) {
+                  GlobalNavigator.showAlertDialog(text: e.toString());
+                  logger.d(stackTrace);
+                }
+              },
+            ),
+          ),
         ],
       ),
     );
