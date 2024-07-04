@@ -6,6 +6,7 @@ import 'package:ktalk/auth/providers/auth_providers.dart';
 import 'package:ktalk/common/widgets/custom_buttom_widget.dart';
 
 import '../../common/utils/global_navigator.dart';
+import '../../common/utils/locale/generated/l10n.dart';
 import '../../common/utils/logger.dart';
 
 class UserInformationScreen extends ConsumerStatefulWidget {
@@ -90,12 +91,12 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('프로필 정보'),
+        title: Text(S.current.userInformationScreenText1),
       ),
       body: Column(
         children: [
           const SizedBox(height: 10),
-          const Text('이름과 프로필 사진을 입력해 주세요'),
+          Text(S.current.userInformationScreenText2),
           const SizedBox(height: 30),
           _profileWidget(),
           Row(
@@ -108,14 +109,14 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                   key: globalKey,
                   child: TextFormField(
                     controller: namecontroller,
-                    decoration: const InputDecoration(
-                      hintText: '이름을 입력해주세요',
+                    decoration: InputDecoration(
+                      hintText: S.current.userInformationScreenText3,
                     ),
                     validator: (value) {
                       if (value == null || value
                           .trim()
                           .isEmpty) {
-                        return '이름을 입력해주세요';
+                        return S.current.userInformationScreenText3;
                       }
                       return null;
                     },
@@ -129,7 +130,7 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
           Padding(
             padding: const EdgeInsets.all(20),
             child: CustomButtonWidget(
-              text: '다음',
+              text: S.current.next,
               onPressed: () async {
                 FocusScope.of(context).unfocus();
                 final form = globalKey.currentState;

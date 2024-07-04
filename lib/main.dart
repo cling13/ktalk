@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,10 +6,17 @@ import 'package:ktalk/auth/providers/auth_providers.dart';
 import 'package:ktalk/auth/screens/phone_number_input_screen.dart';
 import 'package:ktalk/auth/screens/user_information_screen.dart';
 import 'package:ktalk/common/enum/theme_mode_enum.dart';
+import 'package:ktalk/common/providers/Locale_provider.dart';
 import 'package:ktalk/common/providers/custom_theme_provider.dart';
+import 'package:ktalk/common/providers/loader_provider.dart';
+import 'package:ktalk/common/screens/main_layout_screen.dart';
+import 'package:ktalk/common/utils/global_navigator.dart';
 import 'package:ktalk/firebase_options.dart';
 import 'package:ktalk/router.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'common/utils/locale/generated/l10n.dart';
 import 'common/utils/logger.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -31,45 +39,65 @@ class MyApp extends ConsumerWidget {
     final themeData = customTheme.themeModeEnum == ThemeModeEnum.dark
         ? ThemeData.dark()
         : ThemeData.light();
+    final locale = ref.watch(localeProvider);
 
-    return MaterialApp(
-      navigatorKey: navigatorKey,
-      onGenerateRoute: (settings) => genereateRoute(settings),
-        theme: themeData.copyWith(
-          scaffoldBackgroundColor: customTheme.themeColor.background1Color,
-          appBarTheme: AppBarTheme(
-            backgroundColor: customTheme.themeColor.background1Color,
-            elevation: 0,
-            centerTitle: false,
-            titleTextStyle: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: customTheme.themeColor.text1Color,
+    ref.listen(loaderProvider, (previous, next){
+      next ? context.loaderOverlay.show():context.loaderOverlay.hide();
+    });
+
+    return GlobalLoaderOverlay(
+      useDefaultLoading: false,
+      overlayColor: const Color.fromRGBO(0, 0, 0, 0.4),
+      overlayWidgetBuilder: (_) => const Center(
+        child: CircularProgressIndicator(color: Colors.white),
+      ),
+      child: MaterialApp(
+        locale: locale,
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        navigatorKey: navigatorKey,
+        onGenerateRoute: (settings) => genereateRoute(settings),
+          theme: themeData.copyWith(
+            scaffoldBackgroundColor: customTheme.themeColor.background1Color,
+            appBarTheme: AppBarTheme(
+              backgroundColor: customTheme.themeColor.background1Color,
+              elevation: 0,
+              centerTitle: false,
+              titleTextStyle: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: customTheme.themeColor.text1Color,
+              ),
+            ),
+            tabBarTheme: TabBarTheme(
+              indicatorColor: Colors.transparent,
+              labelColor: customTheme.themeColor.text1Color,
+              unselectedLabelColor: Colors.grey.withOpacity(0.7),
+            ),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: customTheme.themeColor.text1Color,
+              ),
+            ),
+            floatingActionButtonTheme: const FloatingActionButtonThemeData(
+              backgroundColor: Colors.yellow,
+              foregroundColor: Colors.black,
+            ),
+            dividerTheme: DividerThemeData(
+              color: Colors.grey.withOpacity(0.2),
+              indent: 15,
+              endIndent: 15,
             ),
           ),
-          tabBarTheme: TabBarTheme(
-            indicatorColor: Colors.transparent,
-            labelColor: customTheme.themeColor.text1Color,
-            unselectedLabelColor: Colors.grey.withOpacity(0.7),
+          home: const Scaffold(
+            body: Main(),
           ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: customTheme.themeColor.text1Color,
-            ),
-          ),
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            backgroundColor: Colors.yellow,
-            foregroundColor: Colors.black,
-          ),
-          dividerTheme: DividerThemeData(
-            color: Colors.grey.withOpacity(0.2),
-            indent: 15,
-            endIndent: 15,
-          ),
-        ),
-        home: const Scaffold(
-          body: Main(),
-        ),
+      ),
     );
   }
 }
@@ -84,6 +112,8 @@ class Main extends ConsumerWidget{
     return Scaffold(
       body: auth.when(
         data: (user){
+          context.loaderOverlay.hide();
+
           if(user == null){
             return const PhoneNumberInputScreen();
           }
@@ -92,17 +122,18 @@ class Main extends ConsumerWidget{
             return const UserInformationScreen();
           }
 
-          return const Center(
-            child: Text('메인화면'),
-          );
+          return const MainLayoutScreen();
         },
         error: (error, stackTrace){
+          context.loaderOverlay.hide();
+          GlobalNavigator.showAlertDialog(text: error.toString());
           logger.d(error);
           logger.d(stackTrace);
           return null;
         },
         loading: () {
-          return const CircularProgressIndicator();
+          context.loaderOverlay.show();
+          return null;
         },
       ),
     );throw UnimplementedError();

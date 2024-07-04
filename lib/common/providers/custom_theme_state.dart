@@ -20,4 +20,14 @@ class CustomThemeState{
         themeColor: brightness == Brightness.dark ? DarkThemeColor() : LightThemeColor(),
         themeModeEnum: brightness == Brightness.dark ? ThemeModeEnum.dark : ThemeModeEnum.light,);
   }
+
+  CustomThemeState copyWith({
+    ThemeColor? themeColor,
+    ThemeModeEnum? themeModeEnum,
+  }) {
+    return CustomThemeState(
+      themeColor: themeColor ?? this.themeColor,
+      themeModeEnum: themeModeEnum ?? this.themeModeEnum,
+    );
+  }
 }
