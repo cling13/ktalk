@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ktalk/common/enum/theme_mode_enum.dart';
 import 'package:ktalk/common/providers/Locale_provider.dart';
+import 'package:ktalk/friend/screens/friend_list_screen.dart';
 
 import '../providers/custom_theme_provider.dart';
 import '../utils/locale/generated/l10n.dart';
@@ -74,6 +75,7 @@ class _MainLayoutScreenState extends ConsumerState<MainLayoutScreen> {
                   leading: const Icon(Icons.logout),
                   title: Text(S.current.mainLayoutScreenText6),
                   onTap: () => FirebaseAuth.instance.signOut(),
+
                 ),
 
                 SwitchListTile(
@@ -125,9 +127,7 @@ class _MainLayoutScreenState extends ConsumerState<MainLayoutScreen> {
           body: const TabBarView(
             physics: NeverScrollableScrollPhysics(),
             children: [
-              Center(
-                child: Text('1번'),
-              ),
+                FriendListScreen(),
               Center(
                 child: Text('2번'),
               ),

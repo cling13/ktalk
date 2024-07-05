@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ktalk/auth/providers/auth_providers.dart';
 import 'package:ktalk/auth/screens/phone_number_input_screen.dart';
@@ -14,17 +17,28 @@ import 'package:ktalk/common/utils/global_navigator.dart';
 import 'package:ktalk/firebase_options.dart';
 import 'package:ktalk/router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'common/utils/locale/generated/l10n.dart';
 import 'common/utils/logger.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
+Future<void> requestPermission() async {
+  final contactPermissionStatus = await Permission.contacts.request();
+
+  if(contactPermissionStatus.isDenied || contactPermissionStatus.isPermanentlyDenied){
+    await openAppSettings();
+    SystemNavigator.pop();
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await requestPermission();
   runApp(const ProviderScope(
     child: MyApp(),
   ));
