@@ -1,10 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ktalk/chat/providers/chat_provider.dart';
 import 'package:ktalk/common/utils/global_navigator.dart';
 import 'package:ktalk/friend/providers/friend_provider.dart';
-import 'package:ktalk/friend/repositories/friend_repository.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../common/utils/logger.dart';
@@ -14,27 +13,34 @@ class FriendListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(padding: const EdgeInsets.only(top: 15),
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
       child: ref.watch(getFriendListProvider).when(
         data: (data) {
           context.loaderOverlay.hide();
           return ListView.separated(
-            separatorBuilder: (context, index) => const SizedBox(height: 10,),
+            separatorBuilder: (context, index) => const SizedBox(
+              height: 10,
+            ),
             itemCount: data.length,
             itemBuilder: (context, index) {
-                final contact = data[index];
-                return ListTile(
-                  title: Text(contact.displayName),
-                  leading: CircleAvatar(
-                    backgroundImage: contact.photo == null
-                        ? const ExtendedAssetImageProvider(
-                        'assets/images/profile.png')
-                        : ExtendedMemoryImageProvider(contact.photo!),
-                    radius: 30,
-                  ),
-                );
-              },
-
+              final contact = data[index];
+              return ListTile(
+                onTap: () async {
+                  await ref
+                      .read(chatProvider.notifier)
+                      .enterChatFromFriendList(selectedContact: contact);
+                },
+                title: Text(contact.displayName),
+                leading: CircleAvatar(
+                  backgroundImage: contact.photo == null
+                      ? const ExtendedAssetImageProvider(
+                          'assets/images/profile.png')
+                      : ExtendedMemoryImageProvider(contact.photo!),
+                  radius: 30,
+                ),
+              );
+            },
           );
         },
         error: (error, stackTrace) {
@@ -48,6 +54,7 @@ class FriendListScreen extends ConsumerWidget {
           context.loaderOverlay.show();
           return null;
         },
-      ),);
+      ),
+    );
   }
 }

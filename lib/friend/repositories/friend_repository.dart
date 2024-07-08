@@ -1,12 +1,9 @@
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ktalk/auth/models/user_model.dart';
-import '../../common/utils/logger.dart';
 
 final friendRepositoryProvider = Provider<FriendRepository>(
     (ref) => FriendRepository(
