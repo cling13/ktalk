@@ -71,4 +71,15 @@ class AuthNotifier extends Notifier<AuthState> {
       loaderNotifier.hide();
     }
   }
+
+  Future<void> getCurrentUserDate() async {
+    try{
+      final userModel = await authRepository.getCurrentUserData();
+      state = state.copyWith(
+        userModel: userModel
+      );
+    } catch (_) {
+      rethrow;
+    }
+  }
 }
