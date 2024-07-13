@@ -1,22 +1,20 @@
 import 'package:flutter_contacts/contact.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ktalk/auth/providers/auth_providers.dart';
-import 'package:ktalk/auth/providers/auth_state.dart';
+import 'package:ktalk/auth/models/user_model.dart';
 import 'package:ktalk/chat/models/chat_model.dart';
 import 'package:ktalk/chat/providers/chat_state.dart';
 import 'package:ktalk/chat/repositories/chat_repository.dart';
 import 'package:ktalk/common/enum/message_enum.dart';
 import 'package:ktalk/common/providers/loader_provider.dart';
-import '../../auth/models/user_model.dart';
 
-final chatProvider = NotifierProvider<ChatNotifier, ChatState>(() =>
-    ChatNotifier());
-
+import '../../auth/providers/auth_providers.dart';
+final chatProvider = NotifierProvider<ChatNotifier, ChatState>(
+  // () => ChatNotifier(),
+    ChatNotifier.new);
 class ChatNotifier extends Notifier<ChatState> {
   late LoaderNotifier loaderNotifier;
   late ChatRepository chatRepository;
   late UserModel currentUserModel;
-
   @override
   ChatState build() {
     loaderNotifier = ref.watch(loaderProvider.notifier);
@@ -24,7 +22,6 @@ class ChatNotifier extends Notifier<ChatState> {
     currentUserModel = ref.watch(authProvider).userModel;
     return ChatState.init();
   }
-
   Future<void> enterChatFromFriendList({
     required Contact selectedContact,
   }) async {
@@ -33,7 +30,6 @@ class ChatNotifier extends Notifier<ChatState> {
       final chatModel = await chatRepository.enterChatFromFriendList(
         selectedContact: selectedContact,
       );
-
       state = state.copyWith(
         model: chatModel,
       );
@@ -43,19 +39,32 @@ class ChatNotifier extends Notifier<ChatState> {
       loaderNotifier.hide();
     }
   }
-
   Future<void> sendMessage({
     String? text,
     required MessageEnum messageType,
   }) async {
-    try{
+    try {
       await chatRepository.sendMessage(
-          text: text,
-          chatModel: state.model as ChatModel,
-          currentUserModel: currentUserModel,
-          messageType: messageType
+        text: text,
+        chatModel: state.model as ChatModel,
+        currentUserModel: currentUserModel,
+        messageType: messageType,
       );
-    } catch (_){
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<void> getMessageList() async {
+    try {
+      final chatModel = state.model as ChatModel;
+      final messageList =
+      await chatRepository.getMessageList(chatId: chatModel.id);
+
+      state = state.copyWith(
+        messageList: messageList,
+      );
+    } catch (_) {
       rethrow;
     }
   }

@@ -11,7 +11,7 @@ class ChatModel extends BaseModel{
     required super.createAt,
   });
 
-  factory ChatModel.intit(){
+  factory ChatModel.init(){
     return ChatModel(
         id: '',
         userList: [],
