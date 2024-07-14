@@ -1,0 +1,83 @@
+[33mcommit 95c56ee06d8a229e694463d5436e7663096e554e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: cling157 <cling157@gmail.com>
+Date:   Sat Jul 13 19:40:58 2024 +0900
+
+    메세지 가져오기
+
+[33mcommit 5ba1f22930382d7ae1ea901b51fa8787dffead3d[m
+Author: cling157 <cling157@gmail.com>
+Date:   Wed Jul 10 17:26:31 2024 +0900
+
+    메세지 전송
+
+[33mcommit 3a85f250255c050d5669e2314a4facbbb6ccd439[m
+Author: cling157 <cling157@gmail.com>
+Date:   Mon Jul 8 16:14:12 2024 +0900
+
+    대화방 생성
+
+[33mcommit 74feb7eca36363f3bf38c699c72925a9d5db6c10[m
+Author: cling157 <cling157@gmail.com>
+Date:   Fri Jul 5 16:57:02 2024 +0900
+
+    친구목록 불러오기 완료
+
+[33mcommit da5abfaa6784d111bdd95d76ca8fa2b220a767ed[m
+Author: cling157 <cling157@gmail.com>
+Date:   Thu Jul 4 16:52:31 2024 +0900
+
+    다국어 설정, 로그아웃 기능 구현
+
+[33mcommit 1ec9907c6ba4690cffac7a671f08b385d52d7a5b[m
+Author: cling157 <cling157@gmail.com>
+Date:   Thu Jul 4 16:51:58 2024 +0900
+
+    다국어 설정, 로그아웃 기능 구현
+
+[33mcommit ac6f368b047ce57f16a6be6eccb2bc5358f82380[m
+Author: cling157 <cling157@gmail.com>
+Date:   Wed Jul 3 13:11:46 2024 +0900
+
+    예외처리 완료
+
+[33mcommit 5921f86cec60f0c93a736328e0c71bcde2f93397[m
+Author: cling157 <cling157@gmail.com>
+Date:   Tue Jul 2 17:21:37 2024 +0900
+
+    프로필 사진 추가 완료
+
+[33mcommit 6cbeb2eab679de1ecf8d2a234b913e25f24fca1c[m
+Author: cling157 <cling157@gmail.com>
+Date:   Tue Jul 2 16:10:10 2024 +0900
+
+    인증번호 입력 구현
+
+[33mcommit 70496eb00463680e170197ff7f93925ef3b176a5[m
+Author: cling157 <cling157@gmail.com>
+Date:   Mon Jul 1 18:12:25 2024 +0900
+
+    지역 선택과 전화번호 입력 구현
+
+[33mcommit b539b6359375c86d2338549f6180632f74bdcc1c[m
+Author: cling157 <cling157@gmail.com>
+Date:   Mon Jul 1 14:31:55 2024 +0900
+
+    지역 선택과 전화번호 입력 구현
+
+[33mcommit 31d2a99c828ed3fe8fcee16585065f24d1959834[m
+Author: cling157 <cling157@gmail.com>
+Date:   Mon Jul 1 14:30:15 2024 +0900
+
+    지역 선택과 전화번호 입력 구현
+
+[33mcommit 45b0a9be169f320a7afcf4d92428170251a61261[m
+Author: cling157 <cling157@gmail.com>
+Date:   Sun Jun 30 14:51:18 2024 +0900
+
+    light, dark 테마 적용
+
+[33mcommit be040b17adb0ca7b02fb650f416bb9f2e9a91ab9[m
+Author: cling157 <cling157@gmail.com>
+Date:   Fri Jun 28 21:00:06 2024 +0900
+
+    light, dark 테마 적용
